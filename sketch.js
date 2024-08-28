@@ -1,27 +1,22 @@
 // sketch.js
 
-let map;
+let gameMap;
 
-function setup()
-{
-    createCanvas(800, 400);
-    map = new Map();
+function setup() {
+  createCanvas(800, 400);
+  gameMap = new GameMap(); 
 }
 
-function draw() 
-{
-    background(135, 206, 235); //sky blue background
-    map.update();
-    map.display();
+function draw() {
+  background(135, 206, 235); // Sky blue background
+  gameMap.update(); // Correct function call
+  gameMap.display();
 }
 
-function keyPressed()
-{
-    if (keyCode === RIGHT_ARROW)
-    {
-        map.move(-5);   //move map left when right arrow is pressed
-    } else if (keycode ===LEFT_ARROW)
-    {
-        map.move(5);   //move map right when left arrow is pressed
-    }
+function keyPressed() {
+  if (keyCode === RIGHT_ARROW) {
+    gameMap.move(-5); // Move map left when right arrow is pressed
+  } else if (keyCode === LEFT_ARROW) {
+    gameMap.move(5); // Move map right when left arrow is pressed
+  }
 }
