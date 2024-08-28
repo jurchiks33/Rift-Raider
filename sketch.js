@@ -3,7 +3,7 @@
 let gameMap;
 
 function setup() {
-  createCanvas(800, 400);
+  createCanvas(1800, 800);
   gameMap = new GameMap(); 
 }
 

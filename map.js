@@ -63,12 +63,21 @@ class GameMap {
       this.y = y;
       this.size = size;
       this.speed = random(0.5, 1.5); // Random speed for each cloud
-      this.sizeChange = random(0.01, 0.03); // Random size change factor
+      this.sizeChangeSpeed = random(0.001, 0.003); // Slow, subtle size change
+      this.noiseOffset = random(1000); // Larger offset to prevent patterns
     }
   
     update() {
       this.x -= this.speed; // Move cloud to the left
-      this.size += sin(frameCount * this.sizeChange); // Change size over time
+  
+      // Smooth size change using Perlin noise, very small amplitude change
+      let noiseValue = noise(this.noiseOffset);
+      this.size += map(noiseValue, 0, 1, -0.1, 0.1); // Subtle size variation
+  
+      // Smooth vertical movement using Perlin noise
+      this.y += map(noise(this.noiseOffset + 500), 0, 1, -0.2, 0.2); // Very small range for movement
+  
+      this.noiseOffset += 0.001; // Very slow increment for Perlin noise
   
       // Reset cloud when it moves off screen
       if (this.x < -200) {
@@ -76,18 +85,27 @@ class GameMap {
         this.y = random(50, 150);
         this.size = random(50, 100);
         this.speed = random(0.5, 1.5);
+        this.noiseOffset = random(1000);
       }
     }
   
     display(offset) {
-      fill(255, 255, 255, 200); // White with slight transparency for a soft look
+      fill(255, 255, 255, 200); // Soft white with transparency
       noStroke();
   
-      // Draw cloud with multiple overlapping ellipses
-      ellipse(this.x + offset, this.y, this.size, this.size * 0.6);
-      ellipse(this.x + offset + this.size * 0.4, this.y - this.size * 0.2, this.size * 0.8, this.size * 0.5);
-      ellipse(this.x + offset - this.size * 0.4, this.y - this.size * 0.2, this.size * 0.8, this.size * 0.5);
-      ellipse(this.x + offset - this.size * 0.9, this.y - this.size * 0.2, this.size * 0.8, this.size * 0.5);
+      // Draw a more complex cloud using multiple ellipses for a fluffy look
+      for (let i = 0; i < 5; i++) {
+        // Randomized positions around the main cloud center
+        let xOffset = random(-this.size * 0.5, this.size * 0.5);
+        let yOffset = random(-this.size * 0.3, this.size * 0.3);
+        let cloudSize = random(this.size * 0.7, this.size * 1.2);
+  
+        // Varying fill for more depth (subtle color variations)
+        let cloudColor = color(255, random(230, 255), random(230, 255), 180 + random(-20, 20));
+        fill(cloudColor);
+        ellipse(this.x + offset + xOffset, this.y + yOffset, cloudSize, cloudSize * 0.6);
+      }
     }
   }
+  
   
